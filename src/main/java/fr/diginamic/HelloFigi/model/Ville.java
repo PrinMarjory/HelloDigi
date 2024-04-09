@@ -2,6 +2,8 @@ package fr.diginamic.HelloFigi.model;
 
 public class Ville {
 	
+	private static Long idCounter = 1L;
+	private Long id;
 	private String nom;
 	private int nbHabitants;
 	
@@ -13,6 +15,14 @@ public class Ville {
 		super();
 		this.nom = nom;
 		this.nbHabitants = nbHabitants;
+		this.id = idCounter++;
+	}
+	
+	/** Getter
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
 	}
 
 	/** Getter
