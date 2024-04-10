@@ -1,9 +1,10 @@
 package fr.diginamic.HelloDigi.controleurs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import fr.diginamic.HelloDigi.model.Ville;
+import fr.diginamic.HelloDigi.service.VilleService;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,70 +16,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.diginamic.HelloFigi.model.Ville;
-
 @RestController
 @RequestMapping("/villes")
 public class VilleControleur {
-	
-	List<Ville> villes = new ArrayList<>(Arrays.asList(new Ville("Paris",2145906), new Ville("Marseille",873000), new Ville("Lyon",537000), new Ville("Toulouse",503481), new Ville("Nice",342669), new Ville("Nantes",324580)));
+		
+	@Autowired
+	private VilleService villeService;
 	
 	@GetMapping
 	public List<Ville> getVilles() {
-		return villes;
+		return villeService.extractVilles();
 	}
 	
 	@GetMapping("/{id}")
 	public Ville getVilleParId(@PathVariable Long id) {
-		Ville ville = findVilleParId(id);
-		return ville;
+		return villeService.extractVille(id);
 	}
 	
 	@GetMapping("nom/{nom}")
 	public Ville getVilleParNom(@PathVariable String nom) {
-		Ville ville = findVilleParNom(nom);
-		return ville;
+		return villeService.extractVille(nom);
 	}
 	
 	@PostMapping
 	public ResponseEntity<String>insertVille(@RequestBody Ville newVille){
-		Ville resultat = findVilleParNom(newVille.getNom());
-		if (resultat != null) {
+		List<Ville> resultat = villeService.insertVille(newVille);
+		if (resultat == null) {
 			return new ResponseEntity<String>("La ville existe déjà",HttpStatus.BAD_REQUEST);
 		}
-		villes.add(newVille);
 		return new ResponseEntity<String>("Ville insérée avec succès",HttpStatus.OK);
 	}
 	
 	@PutMapping
 	public ResponseEntity<String>updateVille(@RequestBody Ville newVille){
-		Ville resultat = findVilleParId(newVille.getId());
+		List<Ville> resultat = villeService.modifierVille(newVille);
 		if (resultat == null) {
 			return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
 		}
-		resultat.setNom(newVille.getNom());
-		resultat.setNbHabitants(newVille.getNbHabitants());
 		return new ResponseEntity<String>("Ville modifiée avec succès",HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String>deleteVille(@PathVariable Long id){
-		Ville resultat = findVilleParId(id);
+		List<Ville> resultat = villeService.supprimerVille(id);
 		if (resultat == null) {
 			return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
 		}
-		villes.remove(resultat);
 		return new ResponseEntity<String>("Ville supprimée avec succès",HttpStatus.OK);
-	}
-	
-	private Ville findVilleParNom(String nom) {
-		Ville resultat = this.villes.stream().filter(element -> nom.equals(element.getNom())).findAny().orElse(null);
-		return resultat;
-	}
-
-	private Ville findVilleParId(Long id) {
-		Ville resultat = this.villes.stream().filter(element -> id.equals(element.getId())).findAny().orElse(null);
-		return resultat;
 	}
 	
 }

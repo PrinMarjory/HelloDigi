@@ -1,13 +1,35 @@
-package fr.diginamic.HelloFigi.model;
+package fr.diginamic.HelloDigi.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+/**
+ * Représente une ville par son identifiant, son nom et son nombre d'habitants
+ * 
+ * @author Marjory PRIN
+ */
+@Entity
+@Table(name = "VILLE")
 public class Ville {
 	
-	private static Long idCounter = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nom;
 	private int nbHabitants;
 	
-	/** Constructeur
+	/** Constructeur pour JPA
+	 * @param nom
+	 * @param nbHabitants
+	 */
+	public Ville() {
+		super();
+	}
+	
+	/** Constructeur pour l'initialisation de la base
 	 * @param nom
 	 * @param nbHabitants
 	 */
@@ -15,7 +37,6 @@ public class Ville {
 		super();
 		this.nom = nom;
 		this.nbHabitants = nbHabitants;
-		this.id = idCounter++;
 	}
 	
 	/** Getter
