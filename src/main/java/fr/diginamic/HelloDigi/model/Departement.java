@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /**
- * Représente un département par son identifiant, son nom et son code postal
+ * Représente un département par son identifiant, son nom et son code 
  * 
  * @author Marjory PRIN
  */

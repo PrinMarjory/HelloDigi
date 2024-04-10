@@ -3,11 +3,12 @@ package fr.diginamic.HelloDigi.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import fr.diginamic.HelloDigi.dao.VilleDAO;
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.model.Ville;
+import fr.diginamic.HelloDigi.repository.VilleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.NoResultException;
 
@@ -15,25 +16,28 @@ import jakarta.persistence.NoResultException;
 public class VilleService {
 	
 	@Autowired
-	VilleDAO villeDAO;
+	VilleRepository villeRepository;
 	
 	@PostConstruct
 	public void init() {
 		//Création de la table Ville à l'initialisation
-		villeDAO.create(new Ville("Paris",2161000, new Departement("Paris","75")));
-		villeDAO.create(new Ville("Marseille",2035000, new Departement("Bouches-du-Rhône","13")));
-		villeDAO.create(new Ville("Lyon",1605000, new Departement("Rhône","69")));
-		villeDAO.create(new Ville("Nantes",303382, new Departement("Loire-Atlantique","44")));
+		villeRepository.save(new Ville("Paris",2161000, new Departement("Paris","75")));
+		villeRepository.save(new Ville("Marseille",2035000, new Departement("Bouches-du-Rhône","13")));
+		villeRepository.save(new Ville("Lyon",1605000, new Departement("Rhône","69")));
+		villeRepository.save(new Ville("Nantes",303382, new Departement("Loire-Atlantique","44")));
+		villeRepository.save(new Ville("Saint-Nazaire",150000, new Departement("Loire-Atlantique","44")));
+		villeRepository.save(new Ville("Bouaye",50000, new Departement("Loire-Atlantique","44")));
+		villeRepository.save(new Ville("Rezé",100000, new Departement("Loire-Atlantique","44")));
 	}	
 
 	public List<Ville> extractVilles() {
-		return villeDAO.findAll();
+		return (List<Ville>) villeRepository.findAll();
 	}
 	
 	public Ville extractVille(Long id) {
 		Ville villeFromDB = null;
 		try {
-			villeFromDB = villeDAO.find(id);
+			villeFromDB = villeRepository.findById(id).get();
 		}
 		catch (NoResultException e) {
 		}
@@ -43,7 +47,7 @@ public class VilleService {
 	public Ville extractVille(String nom) {
 		Ville villeFromDB = null;
 		try {
-			villeFromDB = villeDAO.findByName(nom);
+			villeFromDB = villeRepository.findByNom(nom);
 		}
 		catch (NoResultException e) {
 		}
@@ -52,21 +56,21 @@ public class VilleService {
 	
 	public boolean insertVille(Ville ville) {
 		try {
-			villeDAO.findByName(ville.getNom());
+			villeRepository.findByNom(ville.getNom());
 			return false;
 		}
 		catch(NoResultException nre){
-			villeDAO.create(ville);
+			villeRepository.save(ville);
 			return true;
 		}
 	}
 
 	public boolean modifierVille(Ville ville) {
 		try {
-			Ville villeFromDB = villeDAO.find(ville.getId());
+			Ville villeFromDB = villeRepository.findById(ville.getId()).get();
 			villeFromDB.setNom(ville.getNom());
 			villeFromDB.setNbHabitants(ville.getNbHabitants());
-			villeDAO.update(villeFromDB);
+			villeRepository.save(villeFromDB);
 			return true;
 		}
 		catch(NoResultException nre){
@@ -76,13 +80,39 @@ public class VilleService {
 
 	public boolean supprimerVille(Long idVille) {
 		try {
-			villeDAO.find(idVille);
-			villeDAO.deleteById(idVille);
+			villeRepository.findById(idVille);
+			villeRepository.deleteById(idVille);
 			return true;
 		}
 		catch(NoResultException nre){
 			return false;
 		}
 	}
+	
+	public Iterable<Ville> findByNomStartingWith(String prefix) {
+		return villeRepository.findByNomStartingWith(prefix);
+	}
+    
+    public Iterable<Ville> findByNbHabitantsGreaterThan(int minPopulation) {
+    	return villeRepository.findByNbHabitantsGreaterThan(minPopulation);
+    }
+    
+    public Iterable<Ville> findByNbHabitantsBetween(int minPopulation, int maxPopulation) {
+    	return villeRepository.findByNbHabitantsBetween(minPopulation, maxPopulation);
+    }
+    
+    public Iterable<Ville> findByDepartementCodeAndNbHabitantsGreaterThan(String departementCode, int minPopulation) {
+    	return villeRepository.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, minPopulation);
+    }
+    
+    public Iterable<Ville> findByDepartementCodeAndNbHabitantsBetween(String departementCode, int minPopulation, int maxPopulation) {
+    	return villeRepository.findByDepartementCodeAndNbHabitantsBetween(departementCode, minPopulation, maxPopulation);
+    }
+    
+    public Iterable<Ville> findByDepartementCodeOrderByNbHabitantsDesc(String departementCode, Integer size) {
+    	return villeRepository.findByDepartementCodeOrderByNbHabitantsDesc(departementCode, Pageable.ofSize(size)).getContent();
+    }
+	
+	
 	
 }

@@ -65,4 +65,34 @@ public class VilleControleur {
 		return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
 	}
 	
+	@GetMapping("/nom/startingwith/{prefix}")
+	public Iterable<Ville> findByNomStartingWith(@PathVariable String prefix) {
+		return villeService.findByNomStartingWith(prefix);
+	}
+	
+	@GetMapping("/population/sup/{minPopulation}")
+	public Iterable<Ville> findByNbHabitantsGreaterThan(@PathVariable int minPopulation) {
+		return villeService.findByNbHabitantsGreaterThan(minPopulation);
+	}
+	
+	@GetMapping("/population/entre/{minPopulation}/{maxPopulation}")
+    public Iterable<Ville> findByNbHabitantsBetween(@PathVariable int minPopulation, @PathVariable int maxPopulation) {
+        return villeService.findByNbHabitantsBetween(minPopulation, maxPopulation);
+    }
+
+    @GetMapping("/departement/{departementCode}/population/sup/{minPopulation}")
+    public Iterable<Ville> findByDepartementCodeAndNbHabitantsGreaterThan(@PathVariable String departementCode, @PathVariable int minPopulation) {
+        return villeService.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, minPopulation);
+    }
+
+    @GetMapping("/departement/{departementCode}/population/entre/{minPopulation}/{maxPopulation}")
+    public Iterable<Ville> findByDepartementCodeAndNbHabitantsBetween(@PathVariable String departementCode, @PathVariable int minPopulation, @PathVariable int maxPopulation) {
+        return villeService.findByDepartementCodeAndNbHabitantsBetween(departementCode, minPopulation, maxPopulation);
+    }
+    
+    @GetMapping("/departement/{departementCode}/top/{size}")
+    public Iterable<Ville> findByDepartementCodeOrderByNbHabitantsDesc(@PathVariable String departementCode, @PathVariable int size) {
+        return villeService.findByDepartementCodeOrderByNbHabitantsDesc(departementCode, size);
+    }
+	
 }
