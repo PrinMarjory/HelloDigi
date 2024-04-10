@@ -1,10 +1,12 @@
 package fr.diginamic.HelloDigi.model;
 
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
 
 /**
  * Représente une ville par son identifiant, son nom et son nombre d'habitants
@@ -12,7 +14,6 @@ import jakarta.persistence.Table;
  * @author Marjory PRIN
  */
 @Entity
-@Table(name = "VILLE")
 public class Ville {
 	
 	@Id
@@ -20,11 +21,11 @@ public class Ville {
 	private Long id;
 	private String nom;
 	private int nbHabitants;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@Nonnull
+	Departement departement;
 
-	/** Constructeur pour JPA
-	 * @param nom
-	 * @param nbHabitants
-	 */
+	/** Constructeur pour JPA */
 	public Ville() {
 		super();
 	}
@@ -32,11 +33,13 @@ public class Ville {
 	/** Constructeur pour l'initialisation de la base
 	 * @param nom
 	 * @param nbHabitants
+	 * @param departement
 	 */
-	public Ville(String nom, int nbHabitants) {
+	public Ville(String nom, int nbHabitants, Departement departement) {
 		super();
 		this.nom = nom;
 		this.nbHabitants = nbHabitants;
+		this.departement = departement;
 	}
 	
 	/** Getter
@@ -74,6 +77,19 @@ public class Ville {
 		this.nbHabitants = nbHabitants;
 	}
 
+	/** Getter
+	 * @return the departement
+	 */
+	public Departement getDepartement() {
+		return departement;
+	}
+
+	/** Setter
+	 * @param departement the departement to set
+	 */
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
+	}
 	
 	
 }
