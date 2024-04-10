@@ -40,29 +40,29 @@ public class VilleControleur {
 	
 	@PostMapping
 	public ResponseEntity<String>insertVille(@RequestBody Ville newVille){
-		List<Ville> resultat = villeService.insertVille(newVille);
-		if (resultat == null) {
-			return new ResponseEntity<String>("La ville existe déjà",HttpStatus.BAD_REQUEST);
+		boolean resultat = villeService.insertVille(newVille);
+		if (resultat) {
+			return new ResponseEntity<String>("Ville insérée avec succès",HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Ville insérée avec succès",HttpStatus.OK);
+		return new ResponseEntity<String>("La ville existe déjà",HttpStatus.BAD_REQUEST);
 	}
 	
 	@PutMapping
 	public ResponseEntity<String>updateVille(@RequestBody Ville newVille){
-		List<Ville> resultat = villeService.modifierVille(newVille);
-		if (resultat == null) {
-			return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
+		boolean resultat = villeService.modifierVille(newVille);
+		if (resultat) {
+			return new ResponseEntity<String>("Ville modifiée avec succès",HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Ville modifiée avec succès",HttpStatus.OK);
+		return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String>deleteVille(@PathVariable Long id){
-		List<Ville> resultat = villeService.supprimerVille(id);
-		if (resultat == null) {
-			return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
+		boolean resultat = villeService.supprimerVille(id);
+		if (resultat) {
+			return new ResponseEntity<String>("Ville supprimée avec succès",HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Ville supprimée avec succès",HttpStatus.OK);
+		return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
 	}
 	
 }

@@ -20,7 +20,7 @@ public class Ville {
 	private Long id;
 	private String nom;
 	private int nbHabitants;
-	
+
 	/** Constructeur pour JPA
 	 * @param nom
 	 * @param nbHabitants

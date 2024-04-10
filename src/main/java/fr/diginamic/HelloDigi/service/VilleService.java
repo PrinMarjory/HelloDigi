@@ -1,88 +1,87 @@
 package fr.diginamic.HelloDigi.service;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.diginamic.HelloDigi.dao.VilleDAO;
 import fr.diginamic.HelloDigi.model.Ville;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 
 @Service
 public class VilleService {
 	
-	@PersistenceContext
-	private EntityManager em;
+	@Autowired
+	VilleDAO villeDAO;
 	
-	
-	@Transactional
+	@PostConstruct
+	public void init() {
+		//Création de la table Ville à l'initialisation
+		villeDAO.create(new Ville("Paris",2133111));
+		villeDAO.create(new Ville("Marseille",156224));
+		villeDAO.create(new Ville("Lyon",456952));
+		villeDAO.create(new Ville("Nantes",255692));
+	}	
+
 	public List<Ville> extractVilles() {
-		try {
-			TypedQuery<Ville> query = em.createQuery("SELECT v FROM Ville v", Ville.class);
-			return query.getResultList();
-		}
-		catch (NoResultException e) {
-			return null;
-		}
+		return villeDAO.findAll();
 	}
 	
-	@Transactional
-	public Ville extractVille(String nom) {
-		try {
-			TypedQuery<Ville> query = em.createQuery("SELECT v FROM Ville v WHERE v.nom=:param", Ville.class);
-			query.setParameter("param", nom);
-			return query.getSingleResult();
-		}
-		catch (NoResultException e) {
-			return null;
-		}
-
-	}
-
-	@Transactional
 	public Ville extractVille(Long id) {
+		Ville villeFromDB = null;
 		try {
-			TypedQuery<Ville> query = em.createQuery("SELECT v FROM Ville v WHERE v.id=:param", Ville.class);
-			query.setParameter("param", id);
-			return query.getSingleResult();
+			villeFromDB = villeDAO.find(id);
 		}
 		catch (NoResultException e) {
-			return null;
 		}
+		return villeFromDB;
 	}
 	
-	@Transactional
-	public List<Ville> insertVille(Ville ville) {
-		Ville villeFromDB = extractVille(ville.getNom());
-		if (villeFromDB != null) {
-			return null;
+	public Ville extractVille(String nom) {
+		Ville villeFromDB = null;
+		try {
+			villeFromDB = villeDAO.findByName(nom);
 		}
-		em.persist(ville);
-		return extractVilles();
+		catch (NoResultException e) {
+		}
+		return villeFromDB;
 	}
 	
-	@Transactional
-	public List<Ville> modifierVille(Ville ville) {
-		Ville villeFromDB = em.find(Ville.class, ville.getId());
-		if (villeFromDB == null) {
-			return null;
+	public boolean insertVille(Ville ville) {
+		try {
+			villeDAO.findByName(ville.getNom());
+			return false;
 		}
-		villeFromDB.setNom(ville.getNom());
-		villeFromDB.setNbHabitants(ville.getNbHabitants());
-		return extractVilles();
+		catch(NoResultException nre){
+			villeDAO.create(ville);
+			return true;
+		}
 	}
-	
-	@Transactional
-	public List<Ville> supprimerVille(Long idVille) {
-		Ville villeFromDB = em.find(Ville.class, idVille);
-		if (villeFromDB == null) {
-			return null;
+
+	public boolean modifierVille(Ville ville) {
+		try {
+			Ville villeFromDB = villeDAO.find(ville.getId());
+			villeFromDB.setNom(ville.getNom());
+			villeFromDB.setNbHabitants(ville.getNbHabitants());
+			villeDAO.update(villeFromDB);
+			return true;
 		}
-		em.remove(villeFromDB);
-		return extractVilles();
+		catch(NoResultException nre){
+			return false;
+		}
+	}
+
+	public boolean supprimerVille(Long idVille) {
+		try {
+			villeDAO.find(idVille);
+			villeDAO.deleteById(idVille);
+			return true;
+		}
+		catch(NoResultException nre){
+			return false;
+		}
 	}
 	
 }
