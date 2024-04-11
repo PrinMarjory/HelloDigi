@@ -1,24 +1,11 @@
 package fr.diginamic.HelloDigi.dto;
 
 public class VilleDTO {
-	private Long id;
 	private String nom;
 	private int nbHabitants;
 	private String codeDepartement;
 	private String nomDepartement;
 	
-	/** Getter
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	/** Setter
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
 	/** Getter
 	 * @return the nom
 	 */

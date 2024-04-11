@@ -11,7 +11,6 @@ public class DepartementMapper {
 	
 	public DepartementDTO toDto(Departement depart) {
 		DepartementDTO dto = new DepartementDTO();
-		dto.setId(depart.getId());
 		dto.setCode(depart.getCode());
 		dto.setNom(depart.getNom());
 		int nbHabitants = 0;

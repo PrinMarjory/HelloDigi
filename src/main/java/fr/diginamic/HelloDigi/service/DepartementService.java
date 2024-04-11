@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.repository.DepartementRepository;
 import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class DepartementService {
@@ -20,56 +21,43 @@ public class DepartementService {
 	}
 	
 	public Departement extractDepartement(Long id) {
-		Departement departementFromDB = null;
-		try {
-			departementFromDB = departementRepository.findById(id).get();
-		}
-		catch (NoResultException e) {
-		}
-		return departementFromDB;
+		return departementRepository.findById(id).get();
 	}
 	
 	public Departement extractDepartement(String code) {
-		Departement departementFromDB = null;
-		try {
-			departementFromDB = departementRepository.findByCode(code);
-		}
-		catch (NoResultException e) {
-		}
-		return departementFromDB;
+		return departementRepository.findByCode(code);
 	}
 	
 	public boolean insertDepartement(Departement departement) {
-		try {
-			departementRepository.findByCode(departement.getCode());
+		Departement d = departementRepository.findByCode(departement.getCode());
+		if (d != null) {
 			return false;
-		}
-		catch(NoResultException nre){
+		} else {
 			departementRepository.save(departement);
 			return true;
 		}
 	}
 
 	public boolean modifierDepartement(Departement departement) {
-		try {
-			Departement departementFromDB = departementRepository.findById(departement.getId()).get();
+		Departement departementFromDB = departementRepository.findById(departement.getId()).get();
+		if (departementFromDB != null) {
 			departementFromDB.setNom(departement.getNom());
 			departementFromDB.setCode(departement.getCode());
 			departementRepository.save(departementFromDB);
 			return true;
 		}
-		catch(NoResultException nre){
+		else {
 			return false;
 		}
 	}
-
+	
 	public boolean supprimerDepartement(Long idDepartement) {
-		try {
-			departementRepository.findById(idDepartement);
+		Departement departementFromDB = departementRepository.findById(idDepartement).get();
+		if (departementFromDB != null){
 			departementRepository.deleteById(idDepartement);
 			return true;
 		}
-		catch(NoResultException nre){
+		else {
 			return false;
 		}
 	}
