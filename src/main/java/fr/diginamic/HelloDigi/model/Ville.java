@@ -1,12 +1,16 @@
 package fr.diginamic.HelloDigi.model;
 
-import jakarta.annotation.Nonnull;
+
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Représente une ville par son identifiant, son nom et son nombre d'habitants
@@ -22,7 +26,7 @@ public class Ville {
 	private String nom;
 	private int nbHabitants;
 	@ManyToOne(cascade = CascadeType.ALL)
-	@Nonnull
+	@NotNull
 	Departement departement;
 
 	/** Constructeur pour JPA */
@@ -47,6 +51,14 @@ public class Ville {
 	 */
 	public Long getId() {
 		return id;
+	}
+	
+
+	/** Setter
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/** Getter

@@ -1,9 +1,15 @@
 package fr.diginamic.HelloDigi.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Représente un département par son identifiant, son nom et son code 
@@ -16,8 +22,13 @@ public class Departement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotNull
 	private String nom;
+	@NotNull
+	@Column(unique = true)
 	private String code;
+	@OneToMany(mappedBy = "departement")
+	private List<Ville> villes = new ArrayList<>();
 	
 	/** Constructeur pour JPA */
 	public Departement() {
@@ -75,5 +86,20 @@ public class Departement {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	/** Getter
+	 * @return the villes
+	 */
+	public List<Ville> getVilles() {
+		return villes;
+	}
+
+	/** Setter
+	 * @param villes the villes to set
+	 */
+	public void setVilles(List<Ville> villes) {
+		this.villes = villes;
+	}
+	
 	
 }

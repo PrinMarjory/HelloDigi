@@ -1,7 +1,11 @@
 package fr.diginamic.HelloDigi.controleurs;
 
+import fr.diginamic.HelloDigi.dto.DepartementDTO;
+import fr.diginamic.HelloDigi.mapper.DepartementMapper;
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.service.DepartementService;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +27,22 @@ public class DepartementControleur {
 	@Autowired
 	private DepartementService departementService;
 	
+	@Autowired
+	private DepartementMapper departementMapper;
+	
 	@GetMapping
-	public List<Departement> getDepartements() {
-		return departementService.extractDepartements();
+	public List<DepartementDTO> getDepartements() {
+		return departementService.extractDepartements().stream().map(dep -> departementMapper.toDto(dep)).toList();
 	}
 	
 	@GetMapping("/{id}")
-	public Departement getDepartementParId(@PathVariable Long id) {
-		return departementService.extractDepartement(id);
+	public DepartementDTO getDepartementParId(@PathVariable Long id) {
+		return departementMapper.toDto(departementService.extractDepartement(id));
 	}
 	
 	@GetMapping("/code/{code}")
-	public Departement getDepartementParCode(@PathVariable String code) {
-		return departementService.extractDepartement(code);
+	public DepartementDTO getDepartementParCode(@PathVariable String code) {
+		return departementMapper.toDto(departementService.extractDepartement(code));
 	}
 	
 	@PostMapping

@@ -5,24 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.diginamic.HelloDigi.dao.DepartementDAO;
 import fr.diginamic.HelloDigi.model.Departement;
+import fr.diginamic.HelloDigi.repository.DepartementRepository;
 import jakarta.persistence.NoResultException;
 
 @Service
 public class DepartementService {
 	
 	@Autowired
-	DepartementDAO departementDAO;
+	DepartementRepository departementRepository;
 
 	public List<Departement> extractDepartements() {
-		return departementDAO.findAll();
+		return (List<Departement>) departementRepository.findAll();
 	}
 	
 	public Departement extractDepartement(Long id) {
 		Departement departementFromDB = null;
 		try {
-			departementFromDB = departementDAO.find(id);
+			departementFromDB = departementRepository.findById(id).get();
 		}
 		catch (NoResultException e) {
 		}
@@ -32,7 +32,7 @@ public class DepartementService {
 	public Departement extractDepartement(String code) {
 		Departement departementFromDB = null;
 		try {
-			departementFromDB = departementDAO.findByCode(code);
+			departementFromDB = departementRepository.findByCode(code);
 		}
 		catch (NoResultException e) {
 		}
@@ -41,21 +41,21 @@ public class DepartementService {
 	
 	public boolean insertDepartement(Departement departement) {
 		try {
-			departementDAO.findByCode(departement.getCode());
+			departementRepository.findByCode(departement.getCode());
 			return false;
 		}
 		catch(NoResultException nre){
-			departementDAO.create(departement);
+			departementRepository.save(departement);
 			return true;
 		}
 	}
 
 	public boolean modifierDepartement(Departement departement) {
 		try {
-			Departement departementFromDB = departementDAO.find(departement.getId());
+			Departement departementFromDB = departementRepository.findById(departement.getId()).get();
 			departementFromDB.setNom(departement.getNom());
 			departementFromDB.setCode(departement.getCode());
-			departementDAO.update(departementFromDB);
+			departementRepository.save(departementFromDB);
 			return true;
 		}
 		catch(NoResultException nre){
@@ -65,8 +65,8 @@ public class DepartementService {
 
 	public boolean supprimerDepartement(Long idDepartement) {
 		try {
-			departementDAO.find(idDepartement);
-			departementDAO.deleteById(idDepartement);
+			departementRepository.findById(idDepartement);
+			departementRepository.deleteById(idDepartement);
 			return true;
 		}
 		catch(NoResultException nre){

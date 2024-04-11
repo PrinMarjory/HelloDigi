@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.model.Ville;
+import fr.diginamic.HelloDigi.repository.DepartementRepository;
 import fr.diginamic.HelloDigi.repository.VilleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.NoResultException;
@@ -17,17 +18,15 @@ public class VilleService {
 	
 	@Autowired
 	VilleRepository villeRepository;
+	DepartementRepository departementRepository;
 	
 	@PostConstruct
 	public void init() {
 		//Création de la table Ville à l'initialisation
-		villeRepository.save(new Ville("Paris",2161000, new Departement("Paris","75")));
-		villeRepository.save(new Ville("Marseille",2035000, new Departement("Bouches-du-Rhône","13")));
-		villeRepository.save(new Ville("Lyon",1605000, new Departement("Rhône","69")));
-		villeRepository.save(new Ville("Nantes",303382, new Departement("Loire-Atlantique","44")));
-		villeRepository.save(new Ville("Saint-Nazaire",150000, new Departement("Loire-Atlantique","44")));
-		villeRepository.save(new Ville("Bouaye",50000, new Departement("Loire-Atlantique","44")));
-		villeRepository.save(new Ville("Rezé",100000, new Departement("Loire-Atlantique","44")));
+		villeRepository.save(new Ville("Paris",2161000,new Departement("Paris","75")));
+		villeRepository.save(new Ville("Marseille",2035000,new Departement("Bouches-du-Rhône","13")));
+		villeRepository.save(new Ville("Lyon",1605000,new Departement("Rhône","69")));
+		villeRepository.save(new Ville("Nantes",303382,new Departement("Loire-Atlantique","44")));
 	}	
 
 	public List<Ville> extractVilles() {
