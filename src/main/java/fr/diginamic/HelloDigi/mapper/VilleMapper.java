@@ -20,7 +20,6 @@ public class VilleMapper {
 	
 	public VilleDTO toDto(Ville ville) {
 		VilleDTO dto = new VilleDTO();
-		dto.setId(ville.getId());
 		dto.setNom(ville.getNom());
 		dto.setNbHabitants(ville.getNbHabitants());
 		dto.setCodeDepartement(ville.getDepartement().getCode());
@@ -42,7 +41,8 @@ public class VilleMapper {
 		}
 		Departement d = departementService.extractDepartement(villeDTO.getCodeDepartement());
 		if (d != null) {
-			dep.setId(d.getId());
+			d.setNom(dep.getNom());
+			ville.setDepartement(d);
 		}
 		return ville;
 	}

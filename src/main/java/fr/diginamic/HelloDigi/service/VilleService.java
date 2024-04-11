@@ -1,6 +1,7 @@
 package fr.diginamic.HelloDigi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import fr.diginamic.HelloDigi.repository.DepartementRepository;
 import fr.diginamic.HelloDigi.repository.VilleRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class VilleService {
@@ -34,56 +36,43 @@ public class VilleService {
 	}
 	
 	public Ville extractVille(Long id) {
-		Ville villeFromDB = null;
-		try {
-			villeFromDB = villeRepository.findById(id).get();
-		}
-		catch (NoResultException e) {
-		}
-		return villeFromDB;
+		return villeRepository.findById(id).get();
 	}
 	
 	public Ville extractVille(String nom) {
-		Ville villeFromDB = null;
-		try {
-			villeFromDB = villeRepository.findByNom(nom);
-		}
-		catch (NoResultException e) {
-		}
-		return villeFromDB;
+		return villeRepository.findByNom(nom);
 	}
 	
 	public boolean insertVille(Ville ville) {
-		try {
-			villeRepository.findByNom(ville.getNom());
+		Ville v = villeRepository.findByNom(ville.getNom());
+		if (v != null) {
 			return false;
-		}
-		catch(NoResultException nre){
+		} else {
 			villeRepository.save(ville);
 			return true;
 		}
 	}
-
+	
 	public boolean modifierVille(Ville ville) {
-		try {
-			Ville villeFromDB = villeRepository.findById(ville.getId()).get();
+		Ville villeFromDB = villeRepository.findById(ville.getId()).get();
+		if (villeFromDB != null) {
 			villeFromDB.setNom(ville.getNom());
 			villeFromDB.setNbHabitants(ville.getNbHabitants());
 			villeRepository.save(villeFromDB);
 			return true;
 		}
-		catch(NoResultException nre){
+		else {
 			return false;
 		}
 	}
-
+	
 	public boolean supprimerVille(Long idVille) {
-		try {
-			villeRepository.findById(idVille);
+		Ville villeFromDB = villeRepository.findById(idVille).get();
+		if (villeFromDB != null) {
 			villeRepository.deleteById(idVille);
 			return true;
 		}
-		catch(NoResultException nre){
+		else {
 			return false;
 		}
 	}
