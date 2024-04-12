@@ -1,7 +1,6 @@
 package fr.diginamic.HelloDigi.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -94,28 +93,58 @@ public class VilleService {
 		}
 	}
 	
-	public Iterable<Ville> findByNomStartingWith(String prefix) {
-		return villeRepository.findByNomStartingWith(prefix);
+	public List<Ville> findByNomStartingWith(String prefix) throws FunctionalException {
+		List<Ville> resultat = villeRepository.findByNomStartingWith(prefix);
+		if (resultat.isEmpty()) {
+			throw new FunctionalException("Aucune ville dont le nom commence par "+prefix+" n’a été trouvée");
+		} else {
+			return resultat;
+		}
 	}
     
-    public Iterable<Ville> findByNbHabitantsGreaterThan(int minPopulation) {
-    	return villeRepository.findByNbHabitantsGreaterThan(minPopulation);
+    public List<Ville> findByNbHabitantsGreaterThan(int minPopulation) throws FunctionalException {
+    	List<Ville> resultat = villeRepository.findByNbHabitantsGreaterThan(minPopulation);
+		if (resultat.isEmpty()) {
+			throw new FunctionalException("Aucune ville n’a une population supérieure à "+minPopulation);
+		} else {
+			return resultat;
+		}
     }
     
-    public Iterable<Ville> findByNbHabitantsBetween(int minPopulation, int maxPopulation) {
-    	return villeRepository.findByNbHabitantsBetween(minPopulation, maxPopulation);
+    public List<Ville> findByNbHabitantsBetween(int minPopulation, int maxPopulation) throws FunctionalException {
+    	List<Ville> resultat = villeRepository.findByNbHabitantsBetween(minPopulation, maxPopulation);
+		if (resultat.isEmpty()) {
+			throw new FunctionalException("Aucune ville n’a une population comprise entre "+minPopulation+" et "+maxPopulation);
+		} else {
+			return resultat;
+		}
     }
     
-    public Iterable<Ville> findByDepartementCodeAndNbHabitantsGreaterThan(String departementCode, int minPopulation) {
-    	return villeRepository.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, minPopulation);
+    public List<Ville> findByDepartementCodeAndNbHabitantsGreaterThan(String departementCode, int minPopulation) throws FunctionalException {
+    	List<Ville> resultat = villeRepository.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, minPopulation);
+		if (resultat.isEmpty()) {
+			throw new FunctionalException("Aucune ville n’a une population supérieure à "+minPopulation+" dans le département "+departementCode);
+		} else {
+			return resultat;
+		}
     }
     
-    public Iterable<Ville> findByDepartementCodeAndNbHabitantsBetween(String departementCode, int minPopulation, int maxPopulation) {
-    	return villeRepository.findByDepartementCodeAndNbHabitantsBetween(departementCode, minPopulation, maxPopulation);
+    public List<Ville> findByDepartementCodeAndNbHabitantsBetween(String departementCode, int minPopulation, int maxPopulation) throws FunctionalException {
+    	List<Ville> resultat = villeRepository.findByDepartementCodeAndNbHabitantsBetween(departementCode, minPopulation, maxPopulation);
+		if (resultat.isEmpty()) {
+			throw new FunctionalException("Aucune ville n’a une population comprise entre "+minPopulation+" et "+maxPopulation+" dans le département "+departementCode);
+		} else {
+			return resultat;
+		}
     }
     
-    public Iterable<Ville> findByDepartementCodeOrderByNbHabitantsDesc(String departementCode, Integer size) {
-    	return villeRepository.findByDepartementCodeOrderByNbHabitantsDesc(departementCode, Pageable.ofSize(size)).getContent();
+    public List<Ville> findByDepartementCodeOrderByNbHabitantsDesc(String departementCode, Integer size) throws FunctionalException {
+    	List<Ville> resultat = villeRepository.findByDepartementCodeOrderByNbHabitantsDesc(departementCode, Pageable.ofSize(size)).getContent();
+		if (resultat.isEmpty()) {
+			throw new FunctionalException("Aucune ville n'a été trouvée dans le département "+departementCode);
+		} else {
+			return resultat;
+		}
     }
 	
 	

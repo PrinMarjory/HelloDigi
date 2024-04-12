@@ -65,7 +65,7 @@ public class VilleControleur {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String>deleteVille(@PathVariable Long id){
+	public ResponseEntity<String>deleteVille(@PathVariable Long id) {
 		boolean resultat = villeService.supprimerVille(id);
 		if (resultat) {
 			return new ResponseEntity<String>("Ville supprimée avec succès",HttpStatus.OK);
@@ -74,7 +74,7 @@ public class VilleControleur {
 	}
 	
 	@GetMapping("/nom/startingwith/{prefix}")
-	public List<VilleDTO> findByNomStartingWith(@PathVariable String prefix) {
+	public List<VilleDTO> findByNomStartingWith(@PathVariable String prefix) throws FunctionalException {
 		List<VilleDTO> resultat = new ArrayList<>();
 		for (Ville v : villeService.findByNomStartingWith(prefix)) {
 			resultat.add(villeMapper.toDto(v));
@@ -83,7 +83,7 @@ public class VilleControleur {
 	}
 	
 	@GetMapping("/population/sup/{minPopulation}")
-	public List<VilleDTO> findByNbHabitantsGreaterThan(@PathVariable int minPopulation) {
+	public List<VilleDTO> findByNbHabitantsGreaterThan(@PathVariable int minPopulation) throws FunctionalException {
 		List<VilleDTO> resultat = new ArrayList<>();
 		for (Ville v : villeService.findByNbHabitantsGreaterThan(minPopulation)) {
 			resultat.add(villeMapper.toDto(v));
@@ -92,7 +92,7 @@ public class VilleControleur {
 	}
 	
 	@GetMapping("/population/entre/{minPopulation}/{maxPopulation}")
-    public List<VilleDTO> findByNbHabitantsBetween(@PathVariable int minPopulation, @PathVariable int maxPopulation) {
+    public List<VilleDTO> findByNbHabitantsBetween(@PathVariable int minPopulation, @PathVariable int maxPopulation) throws FunctionalException {
 		List<VilleDTO> resultat = new ArrayList<>();
 		for (Ville v : villeService.findByNbHabitantsBetween(minPopulation, maxPopulation)) {
 			resultat.add(villeMapper.toDto(v));
@@ -101,7 +101,7 @@ public class VilleControleur {
     }
 
     @GetMapping("/departement/{departementCode}/population/sup/{minPopulation}")
-    public List<VilleDTO> findByDepartementCodeAndNbHabitantsGreaterThan(@PathVariable String departementCode, @PathVariable int minPopulation) {
+    public List<VilleDTO> findByDepartementCodeAndNbHabitantsGreaterThan(@PathVariable String departementCode, @PathVariable int minPopulation) throws FunctionalException {
 		List<VilleDTO> resultat = new ArrayList<>();
 		for (Ville v : villeService.findByDepartementCodeAndNbHabitantsGreaterThan(departementCode, minPopulation)) {
 			resultat.add(villeMapper.toDto(v));
@@ -110,7 +110,7 @@ public class VilleControleur {
     }
 
     @GetMapping("/departement/{departementCode}/population/entre/{minPopulation}/{maxPopulation}")
-    public List<VilleDTO> findByDepartementCodeAndNbHabitantsBetween(@PathVariable String departementCode, @PathVariable int minPopulation, @PathVariable int maxPopulation) {
+    public List<VilleDTO> findByDepartementCodeAndNbHabitantsBetween(@PathVariable String departementCode, @PathVariable int minPopulation, @PathVariable int maxPopulation) throws FunctionalException {
 		List<VilleDTO> resultat = new ArrayList<>();
 		for (Ville v : villeService.findByDepartementCodeAndNbHabitantsBetween(departementCode, minPopulation, maxPopulation)) {
 			resultat.add(villeMapper.toDto(v));
@@ -119,7 +119,7 @@ public class VilleControleur {
     }
     
     @GetMapping("/departement/{departementCode}/top/{size}")
-    public List<VilleDTO> findByDepartementCodeOrderByNbHabitantsDesc(@PathVariable String departementCode, @PathVariable int size) {
+    public List<VilleDTO> findByDepartementCodeOrderByNbHabitantsDesc(@PathVariable String departementCode, @PathVariable int size) throws FunctionalException {
 		List<VilleDTO> resultat = new ArrayList<>();
 		for (Ville v : villeService.findByDepartementCodeOrderByNbHabitantsDesc(departementCode, size)) {
 			resultat.add(villeMapper.toDto(v));
