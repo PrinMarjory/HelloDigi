@@ -1,19 +1,17 @@
 package fr.diginamic.HelloDigi.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import fr.diginamic.HelloDigi.exception.FunctionalException;
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.model.Ville;
 import fr.diginamic.HelloDigi.repository.DepartementRepository;
 import fr.diginamic.HelloDigi.repository.VilleRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.NoResultException;
-import jakarta.transaction.Transactional;
 
 @Service
 public class VilleService {
@@ -43,19 +41,37 @@ public class VilleService {
 		return villeRepository.findByNom(nom);
 	}
 	
-	public boolean insertVille(Ville ville) {
+	public boolean insertVille(Ville ville) throws FunctionalException {
 		Ville v = villeRepository.findByNom(ville.getNom());
-		if (v != null) {
+		if (v != null && v.getDepartement().equals(ville.getDepartement())) {
 			return false;
 		} else {
+			if(ville.getNbHabitants()<10) {
+				throw new FunctionalException("La ville doit avoir au moins 10 habitants");
+			}
+			if(ville.getNom().length()<2) {
+				throw new FunctionalException("Le nom de la ville doit contenir au moins deux lettres");
+			}
+			if(ville.getDepartement().getCode().length()<2) {
+				throw new FunctionalException("Le code du département doit contenir au moins deux caractères");
+			}
 			villeRepository.save(ville);
 			return true;
 		}
 	}
 	
-	public boolean modifierVille(Ville ville) {
+	public boolean modifierVille(Ville ville) throws FunctionalException {
 		Ville villeFromDB = villeRepository.findById(ville.getId()).get();
 		if (villeFromDB != null) {
+			if(ville.getNbHabitants()<10) {
+				throw new FunctionalException("La ville doit avoir au moins 10 habitants");
+			}
+			if(ville.getNom().length()<2) {
+				throw new FunctionalException("Le nom de la ville doit contenir au moins deux lettres");
+			}
+			if(ville.getDepartement().getCode().length()<2) {
+				throw new FunctionalException("Le code du département doit contenir au moins deux caractères");
+			}
 			villeFromDB.setNom(ville.getNom());
 			villeFromDB.setNbHabitants(ville.getNbHabitants());
 			villeRepository.save(villeFromDB);

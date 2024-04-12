@@ -1,6 +1,7 @@
 package fr.diginamic.HelloDigi.controleurs;
 
 import fr.diginamic.HelloDigi.dto.VilleDTO;
+import fr.diginamic.HelloDigi.exception.FunctionalException;
 import fr.diginamic.HelloDigi.model.Ville;
 import fr.diginamic.HelloDigi.service.VilleService;
 import fr.diginamic.HelloDigi.mapper.VilleMapper;
@@ -46,7 +47,7 @@ public class VilleControleur {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String>insertVille(@RequestBody VilleDTO newVille){
+	public ResponseEntity<String>insertVille(@RequestBody VilleDTO newVille) throws FunctionalException {
 		boolean resultat = villeService.insertVille(villeMapper.toBean(newVille));
 		if (resultat) {
 			return new ResponseEntity<String>("Ville insérée avec succès",HttpStatus.OK);
@@ -55,7 +56,7 @@ public class VilleControleur {
 	}
 	
 	@PutMapping
-	public ResponseEntity<String>updateVille(@RequestBody VilleDTO newVille){
+	public ResponseEntity<String>updateVille(@RequestBody VilleDTO newVille) throws FunctionalException {
 		boolean resultat = villeService.modifierVille(villeMapper.toBean(newVille));
 		if (resultat) {
 			return new ResponseEntity<String>("Ville modifiée avec succès",HttpStatus.OK);

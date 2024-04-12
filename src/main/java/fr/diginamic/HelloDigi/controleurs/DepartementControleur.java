@@ -1,11 +1,11 @@
 package fr.diginamic.HelloDigi.controleurs;
 
 import fr.diginamic.HelloDigi.dto.DepartementDTO;
+import fr.diginamic.HelloDigi.exception.FunctionalException;
 import fr.diginamic.HelloDigi.mapper.DepartementMapper;
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.service.DepartementService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class DepartementControleur {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String>insertDepartement(@RequestBody Departement newDepartement){
+	public ResponseEntity<String>insertDepartement(@RequestBody Departement newDepartement) throws FunctionalException{
 		boolean resultat = departementService.insertDepartement(newDepartement);
 		if (resultat) {
 			return new ResponseEntity<String>("Département inséré avec succès",HttpStatus.OK);
@@ -55,7 +55,7 @@ public class DepartementControleur {
 	}
 	
 	@PutMapping
-	public ResponseEntity<String>updateDepartement(@RequestBody Departement newDepartement){
+	public ResponseEntity<String>updateDepartement(@RequestBody Departement newDepartement) throws FunctionalException {
 		boolean resultat = departementService.modifierDepartement(newDepartement);
 		if (resultat) {
 			return new ResponseEntity<String>("Département modifié avec succès",HttpStatus.OK);
