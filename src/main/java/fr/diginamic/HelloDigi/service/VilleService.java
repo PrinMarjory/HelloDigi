@@ -19,7 +19,8 @@ public class VilleService {
 	@Autowired
 	VilleRepository villeRepository;
 	DepartementRepository departementRepository;
-	
+
+	/* Methode script SQL
 	@PostConstruct
 	public void init() {
 		//Création de la table Ville à l'initialisation
@@ -28,6 +29,7 @@ public class VilleService {
 		villeRepository.save(new Ville("Lyon",1605000,new Departement("Rhône","69")));
 		villeRepository.save(new Ville("Nantes",303382,new Departement("Loire-Atlantique","44")));
 	}	
+	*/
 
 	public List<Ville> extractVilles() {
 		return (List<Ville>) villeRepository.findAll();
