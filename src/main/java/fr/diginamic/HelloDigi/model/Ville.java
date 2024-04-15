@@ -25,7 +25,8 @@ public class Ville {
 	private Long id;
 	private String nom;
 	private int nbHabitants;
-	@ManyToOne(cascade = CascadeType.ALL)
+	//@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@NotNull
 	Departement departement;
 

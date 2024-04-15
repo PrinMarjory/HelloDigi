@@ -1,5 +1,9 @@
 package fr.diginamic.HelloDigi.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +13,6 @@ import org.springframework.stereotype.Service;
 import fr.diginamic.HelloDigi.exception.FunctionalException;
 import fr.diginamic.HelloDigi.model.Departement;
 import fr.diginamic.HelloDigi.model.Ville;
-import fr.diginamic.HelloDigi.repository.DepartementRepository;
 import fr.diginamic.HelloDigi.repository.VilleRepository;
 import jakarta.annotation.PostConstruct;
 
@@ -18,18 +21,28 @@ public class VilleService {
 	
 	@Autowired
 	VilleRepository villeRepository;
-	DepartementRepository departementRepository;
+	
+	@Autowired
+	DepartementService departementService;
 
-	/* Methode script SQL
 	@PostConstruct
-	public void init() {
-		//Création de la table Ville à l'initialisation
-		villeRepository.save(new Ville("Paris",2161000,new Departement("Paris","75")));
-		villeRepository.save(new Ville("Marseille",2035000,new Departement("Bouches-du-Rhône","13")));
-		villeRepository.save(new Ville("Lyon",1605000,new Departement("Rhône","69")));
-		villeRepository.save(new Ville("Nantes",303382,new Departement("Loire-Atlantique","44")));
+	public void init() throws IOException, FunctionalException {
+		//Chargement de la base à l'intialisation
+		Path path = Paths.get("C:/Users/marjo/Documents/Diginamic/Java/HelloDigi/src/main/resources/cities.csv");
+		List<String> lignes = Files.readAllLines(path);
+		lignes.remove(0);
+		for (String ligne : lignes) {
+			String[] morceaux = ligne.split(",");
+			Departement depart = departementService.extractDepartement(morceaux[7]);
+			if (depart == null) {
+				depart = new Departement(morceaux[6],morceaux[7]);
+				departementService.insertDepartement(depart);
+			}
+			Ville ville = new Ville(morceaux[3],0, depart);
+			insertVille(ville);
+		}
+		
 	}	
-	*/
 
 	public List<Ville> extractVilles() {
 		return (List<Ville>) villeRepository.findAll();
@@ -39,18 +52,21 @@ public class VilleService {
 		return villeRepository.findById(id).get();
 	}
 	
+	
 	public Ville extractVille(String nom) {
 		return villeRepository.findByNom(nom);
 	}
 	
 	public boolean insertVille(Ville ville) throws FunctionalException {
-		Ville v = villeRepository.findByNom(ville.getNom());
-		if (v != null && v.getDepartement().equals(ville.getDepartement())) {
+		Ville villeFromDB = villeRepository.findByNomAndDepartementCode(ville.getNom(), ville.getDepartement().getCode());
+		if (villeFromDB != null) {
 			return false;
 		} else {
+			/*
 			if(ville.getNbHabitants()<10) {
 				throw new FunctionalException("La ville doit avoir au moins 10 habitants");
 			}
+			*/
 			if(ville.getNom().length()<2) {
 				throw new FunctionalException("Le nom de la ville doit contenir au moins deux lettres");
 			}
@@ -65,9 +81,11 @@ public class VilleService {
 	public boolean modifierVille(Ville ville) throws FunctionalException {
 		Ville villeFromDB = villeRepository.findById(ville.getId()).get();
 		if (villeFromDB != null) {
+			/*
 			if(ville.getNbHabitants()<10) {
 				throw new FunctionalException("La ville doit avoir au moins 10 habitants");
 			}
+			*/
 			if(ville.getNom().length()<2) {
 				throw new FunctionalException("Le nom de la ville doit contenir au moins deux lettres");
 			}

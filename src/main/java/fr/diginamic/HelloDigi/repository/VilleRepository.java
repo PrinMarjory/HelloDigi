@@ -9,6 +9,8 @@ import fr.diginamic.HelloDigi.model.Ville;
 
 public interface VilleRepository extends CrudRepository<Ville, Long> {
 	
+	public Ville findByNomAndDepartementCode (String nom, String departementCode);
+	
 	public Ville findByNom(String nom);
 	
 	public List<Ville> findByNomStartingWith(String prefix);
