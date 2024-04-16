@@ -1,4 +1,4 @@
-package fr.diginamic.HelloDigi.controleurs;
+package fr.diginamic.HelloDigi.rest;
 
 import fr.diginamic.HelloDigi.dto.VilleDTO;
 import fr.diginamic.HelloDigi.exception.FunctionalException;
@@ -35,8 +35,8 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @RestController
-@RequestMapping("/villes")
-public class VilleControleur {
+@RequestMapping("api/villes")
+public class VilleController {
 	
 	@Value("${hellodigi.export}")
 	private String file;

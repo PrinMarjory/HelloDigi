@@ -1,4 +1,4 @@
-package fr.diginamic.HelloDigi.controleurs;
+package fr.diginamic.HelloDigi.rest;
 
 import fr.diginamic.HelloDigi.dto.DepartementDTO;
 import fr.diginamic.HelloDigi.exception.FunctionalException;
@@ -34,8 +34,8 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @RestController
-@RequestMapping("/departement")
-public class DepartementControleur {
+@RequestMapping("api/departement")
+public class DepartementController {
 	
 	@Value("${hellodigi.export}")
 	private String file;

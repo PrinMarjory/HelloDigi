@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset"UTF-8">
+		<title>Villes</title>
+		<style>
+	        table {
+	            width: 30%;
+	            border-collapse: collapse;
+	        }
+	        th, td {
+	            text-align: center;
+	            padding: 8px;
+	        }
+	        th {
+	            background-color: #f2f2f2;
+	        }
+    	</style>
+	</head>
+	<body>
+		<h1>Liste des villes</h1>
+		<table>
+	        <thead>
+	            <tr>
+	                <th>Nom</th>
+	                <th>Département</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="ville : ${villes}">
+	                <td th:text="${ville.nom}"></td>
+	                <td th:text="${ville.departement.nom + ' (' + ville.departement.code + ')'}"></td>
+	            </tr>
+	        </tbody>
+		</table>
+	</body>
+</html>

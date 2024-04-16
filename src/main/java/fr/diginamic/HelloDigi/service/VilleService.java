@@ -24,7 +24,8 @@ public class VilleService {
 	
 	@Autowired
 	DepartementService departementService;
-
+	
+	/*
 	@PostConstruct
 	public void init() throws IOException, FunctionalException {
 		//Chargement de la base à l'intialisation
@@ -40,9 +41,9 @@ public class VilleService {
 			}
 			Ville ville = new Ville(morceaux[3],0, depart);
 			insertVille(ville);
-		}
-		
+		}	
 	}	
+	*/
 
 	public List<Ville> extractVilles() {
 		return (List<Ville>) villeRepository.findAll();
