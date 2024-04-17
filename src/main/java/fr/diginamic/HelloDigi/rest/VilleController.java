@@ -35,7 +35,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @RestController
-@RequestMapping("api/villes")
+@RequestMapping("/api/villes")
 public class VilleController {
 	
 	@Value("${hellodigi.export}")

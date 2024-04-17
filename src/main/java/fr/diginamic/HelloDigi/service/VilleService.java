@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.diginamic.HelloDigi.exception.FunctionalException;
@@ -103,6 +104,7 @@ public class VilleService {
 		}
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	public boolean supprimerVille(Long idVille) {
 		Ville villeFromDB = villeRepository.findById(idVille).get();
 		if (villeFromDB != null) {
