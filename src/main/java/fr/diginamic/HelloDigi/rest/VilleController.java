@@ -122,7 +122,8 @@ public class VilleController {
 		return new ResponseEntity<String>("La ville n'existe pas",HttpStatus.BAD_REQUEST);
 	}
 	
-	@DeleteMapping("/{id}")
+	//@DeleteMapping("/{id}")
+	@GetMapping("/delete/{id}")
 	public ResponseEntity<String>deleteVille(@PathVariable Long id) {
 		boolean resultat = villeService.supprimerVille(id);
 		if (resultat) {
