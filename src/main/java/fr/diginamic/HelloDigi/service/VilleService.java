@@ -104,7 +104,7 @@ public class VilleService {
 		}
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public boolean supprimerVille(Long idVille) {
 		Ville villeFromDB = villeRepository.findById(idVille).get();
 		if (villeFromDB != null) {

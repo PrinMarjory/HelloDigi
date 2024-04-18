@@ -24,12 +24,18 @@
 	            <tr>
 	                <th>Nom</th>
 	                <th>Département</th>
+					<th th:if="${roles.contains('ROLE_ADMIN')}">Actions</th>
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr th:each="ville : ${villes}">
+	            <tr th:each="ville, iterStat : ${villes.subList(0, 20)}">
 	                <td th:text="${ville.nom}"></td>
 	                <td th:text="${ville.departement.nom + ' (' + ville.departement.code + ')'}"></td>
+					<td th:if="${roles.contains('ROLE_ADMIN')}">
+						<form th:action="@{'/api/villes/delete/'+${ville.id}}" method="get">
+							<button type="submit">Delete</button>
+						</form>
+					</td>
 	            </tr>
 	        </tbody>
 		</table>

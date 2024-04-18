@@ -1,6 +1,7 @@
 package fr.diginamic.HelloDigi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import fr.diginamic.HelloDigi.model.UserAccount;
@@ -24,5 +25,4 @@ public class UserAccountService {
 			userAccountRepository.save(user2);
 		}
 	}
-	
 }

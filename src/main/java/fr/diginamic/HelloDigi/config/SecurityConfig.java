@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,14 +42,16 @@ public class SecurityConfig {
 		return username -> userAccountRepository.findByUsername(username).asUser();
 	}
 	
+	
 	@Bean
 	SecurityFilterChain configureSecurity(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
 			.requestMatchers("/login").permitAll() // permet l'accès au login à tous
-			.requestMatchers("/", "/index").authenticated()
-			.requestMatchers(HttpMethod.GET, "/villes/**").authenticated() // protection api
+			.requestMatchers("/", "/index", "/villes/**").authenticated()
+			.requestMatchers(HttpMethod.GET, "/api/villes/**").authenticated() // protection api
+			.requestMatchers(HttpMethod.POST, "/api/villes/**").hasRole("ADMIN")
 			.requestMatchers("/admin").hasRole("ADMIN")
-			.requestMatchers(HttpMethod.GET, "/api/villes/**").hasRole("ADMIN")
+
 			.anyRequest().denyAll() //tout le reste est sécurisé
 			.and()
 			.formLogin()
