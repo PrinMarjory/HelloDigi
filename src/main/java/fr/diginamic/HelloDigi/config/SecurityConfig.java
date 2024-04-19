@@ -2,6 +2,7 @@ package fr.diginamic.HelloDigi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,7 +48,7 @@ public class SecurityConfig {
 	SecurityFilterChain configureSecurity(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
 			.requestMatchers("/login").permitAll() // permet l'accès au login à tous
-			.requestMatchers("/", "/index", "/villes/**").authenticated()
+			.requestMatchers("/", "/index", "/villes/**", "/setLanguage").authenticated()
 			.requestMatchers(HttpMethod.GET, "/api/villes/**").authenticated() // protection api
 			.requestMatchers(HttpMethod.POST, "/api/villes/**").hasRole("ADMIN")
 			.requestMatchers("/admin").hasRole("ADMIN")
@@ -58,5 +59,13 @@ public class SecurityConfig {
 			.and()
 			.httpBasic();
 		return http.build();
+	}
+	
+	@Bean
+	public ResourceBundleMessageSource messageSource( ) {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages"); 
+        messageSource.setDefaultEncoding("UTF-8"); 
+        return messageSource;
 	}
 }

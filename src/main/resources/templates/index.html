@@ -1,17 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<meta charset"UTF-8">
-		<title>Accueil DigiHello</title>
+		<meta charset="UTF-8">
+		<title th:text="#{index.title}">Accueil DigiHello</title>
 	</head>
 	
 	<body>
-		<h1>Accueil DigiHello</h1>
-		<h3>Profil utilisateur</h3>
+		<select id="languageSelect"> 
+			<option value="en" th:selected="${userLanguage == 'en'}">English</option> 
+			<option value="fr" th:selected="${userLanguage == 'fr'}">French</option> 
+		</select>
+		<h1 th:text="#{index.title}">Accueil DigiHello</h1>
+		<h3 th:text="#{index.profile}">Profil utilisateur</h3>
 		<ul>
-			<li th:text="'Username : '+${authentication.name}">Username</li>
-			<li th:text="'Authorities : '+${authentication.authorities}">Authorities</li>
+			<li th:text="${#messages.msg('index.username')}+' : '+${authentication.name}">Username</li>
+			<li th:text="${#messages.msg('index.authorities')}+' : '+${authentication.authorities}">Authorities</li>
 		</ul>
-		<a href="http://localhost:8080/villes">Liste des villes</a>
+		<a href="http://localhost:8080/villes" th:text="${#messages.msg('index.townList')}">Liste des villes</a>
+
+		<script>
+			document.getElementById('languageSelect').addEventListener('change', function() {
+				var selectedLanguage = this.value;
+				window.location.href = '/setLanguage?lang=' + selectedLanguage;
+			});
+		</script>
 	</body>
 </html>
